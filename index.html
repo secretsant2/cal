@@ -1,115 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apple-inspired Calculator</title>
-   <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-        }
-        
-        .calculator {
-            border-radius: 10px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            width: 300px; /* Set a default width */
-        }
-        
-        .display {
-            padding: 10px;
-            text-align: right;
-            font-size: 1.5em;
-            background-color: #f6f6f6;
-        }
-        
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1px;
-        }
-        
-        .button {
-            padding: 20px;
-            font-size: 1.2em;
-            cursor: pointer;
-            text-align: center;
-            background-color: #e0e0e0;
-            transition: background-color 0.3s;
-        }
-        
-        .button:hover {
-            background-color: #d2d2d2;
-        }
-        
-        .button.operator {
-            background-color: #f0ad4e;
-        }
-        
-        .button.clear {
-            grid-column: span 2;
-            background-color: #d9534f;
-        }
-        
-        .button.equal {
-            background-color: #5cb85c;
-        }
-
-        @media screen and (max-width: 600px) {
-            /* Adjust styles for smaller screens */
-            .calculator {
-                width: 90%;
-            }
-            .button {
-                padding: 15px;
-                font-size: 1em;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="calculator">
-        <div class="display" id="display">0</div>
-        <div class="buttons">
-            <div class="button" data-value="7">7</div>
-            <div class="button" data-value="8">8</div>
-            <div class="button" data-value="9">9</div>
-            <div class="button operator" data-value="/">÷</div>
-            <div class="button" data-value="4">4</div>
-            <div class="button" data-value="5">5</div>
-            <div class="button" data-value="6">6</div>
-            <div class="button operator" data-value="*">×</div>
-            <div class="button" data-value="1">1</div>
-            <div class="button" data-value="2">2</div>
-            <div class="button" data-value="3">3</div>
-            <div class="button operator" data-value="-">-</div>
-            <div class="button" data-value="0">0</div>
-            <div class="button" data-value=".">.</div>
-            <div class="button clear" id="clear">C</div>
-            <div class="button operator equal" id="equal">=</div>
-            <div class="button operator" data-value="+">+</div>
-        </div>
-    </div>
-
-    <script>
-        const display = document.getElementById('display');
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mileage Calculator</title><style>body{font-family:Arial,sans-serif;margin:0;padding:0;display:flex;justify-content:center;align-items:center;height:100vh;background-color:#f4f4f4}.calculator{border-radius:10px;background-color:#fff;box-shadow:0 4px 8px rgba(0,0,0,.1);overflow:hidden;width:300px;max-width:100%}.display{padding:10px;text-align:right;font-size:1.5em;background-color:#f6f6f6}.buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:1px}.button{padding:20px;font-size:1.2em;cursor:pointer;text-align:center;background-color:#e0e0e0;transition:background-color .3s}.button:hover{background-color:#d2d2d2}.button.operator{background-color:#f0ad4e}.button.clear{grid-column:span 2;background-color:#d9534f}.button.equal{background-color:#5cb85c}@media screen and (max-width:600px){.calculator{width:90%}.button{padding:15px;font-size:1em}}</style></head><body><div class="calculator"><div class="display" id="display">0</div><div class="buttons"><div class="button" data-value="7">7</div><div class="button" data-value="8">8</div><div class="button" data-value="9">9</div><div class="button operator" data-value="/">÷</div><div class="button" data-value="4">4</div><div class="button" data-value="5">5</div><div class="button" data-value="6">6</div><div class="button operator" data-value="*">×</div><div class="button" data-value="1">1</div><div class="button" data-value="2">2</div><div class="button" data-value="3">3</div><div class="button operator" data-value="-">-</div><div class="button" data-value="0">0</div><div class="button" data-value=".">.</div><div class="button clear" id="clear">C</div><div class="button operator equal" id="equal">=</div><div class="button operator" data-value="+">+</div></div></div><script>const display = document.getElementById('display');
         let currentInput = '0';
         let firstOperand = null;
         let operator = null;
         let waitingForSecondOperand = false;
-        
+
         function updateDisplay() {
             display.textContent = currentInput;
         }
-        
+
         function inputDigit(digit) {
             if (waitingForSecondOperand) {
                 currentInput = digit;
@@ -119,14 +17,14 @@
             }
             updateDisplay();
         }
-        
+
         function inputDecimal() {
             if (!currentInput.includes('.')) {
                 currentInput += '.';
                 updateDisplay();
             }
         }
-        
+
         function handleOperator(nextOperator) {
             const inputValue = parseFloat(currentInput);
             if (firstOperand === null) {
@@ -139,7 +37,7 @@
             waitingForSecondOperand = true;
             operator = nextOperator;
         }
-        
+
         function performCalculation(operator, secondOperand) {
             switch (operator) {
                 case '+': return firstOperand + secondOperand;
@@ -160,6 +58,7 @@
 
         function handleClear() {
             resetCalculator();
+            vibrate();
         }
 
         function handleEqual() {
@@ -171,6 +70,13 @@
                 firstOperand = result;
                 operator = null;
                 waitingForSecondOperand = true;
+                vibrate();
+            }
+        }
+
+        function vibrate() {
+            if (navigator.vibrate) {
+                navigator.vibrate(100); // Vibrate for 100 milliseconds
             }
         }
 
@@ -178,16 +84,21 @@
         document.querySelectorAll('.button[data-value]').forEach(button => {
             button.addEventListener('click', () => {
                 inputDigit(button.getAttribute('data-value'));
+                vibrate();
             });
         });
 
         // Event listener for decimal button
-        document.querySelector('.button[data-value="."]').addEventListener('click', inputDecimal);
+        document.querySelector('.button[data-value="."]').addEventListener('click', () => {
+            inputDecimal();
+            vibrate();
+        });
 
         // Event listeners for operator buttons
         document.querySelectorAll('.button.operator[data-value]').forEach(button => {
             button.addEventListener('click', () => {
                 handleOperator(button.getAttribute('data-value'));
+                vibrate();
             });
         });
 
@@ -195,10 +106,4 @@
         document.getElementById('clear').addEventListener('click', handleClear);
 
         // Event listener for equal button
-        document.getElementById('equal').addEventListener('click', handleEqual);
-        
-        
-    </script>
-</body>
-</html>
-
+        document.getElementById('equal').addEventListener('click', handleEqual);</script></body></html>
