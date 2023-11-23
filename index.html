@@ -1,109 +1,156 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mileage Calculator</title><style>body{font-family:Arial,sans-serif;margin:0;padding:0;display:flex;justify-content:center;align-items:center;height:100vh;background-color:#f4f4f4}.calculator{border-radius:10px;background-color:#fff;box-shadow:0 4px 8px rgba(0,0,0,.1);overflow:hidden;width:300px;max-width:100%}.display{padding:10px;text-align:right;font-size:1.5em;background-color:#f6f6f6}.buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:1px}.button{padding:20px;font-size:1.2em;cursor:pointer;text-align:center;background-color:#e0e0e0;transition:background-color .3s}.button:hover{background-color:#d2d2d2}.button.operator{background-color:#f0ad4e}.button.clear{grid-column:span 2;background-color:#d9534f}.button.equal{background-color:#5cb85c}@media screen and (max-width:600px){.calculator{width:90%}.button{padding:15px;font-size:1em}}</style></head><body><div class="calculator"><div class="display" id="display">0</div><div class="buttons"><div class="button" data-value="7">7</div><div class="button" data-value="8">8</div><div class="button" data-value="9">9</div><div class="button operator" data-value="/">÷</div><div class="button" data-value="4">4</div><div class="button" data-value="5">5</div><div class="button" data-value="6">6</div><div class="button operator" data-value="*">×</div><div class="button" data-value="1">1</div><div class="button" data-value="2">2</div><div class="button" data-value="3">3</div><div class="button operator" data-value="-">-</div><div class="button" data-value="0">0</div><div class="button" data-value=".">.</div><div class="button clear" id="clear">C</div><div class="button operator equal" id="equal">=</div><div class="button operator" data-value="+">+</div></div></div><script>const display = document.getElementById('display');
-        let currentInput = '0';
-        let firstOperand = null;
-        let operator = null;
-        let waitingForSecondOperand = false;
+<!DOCTYPE html>
+<html lang="en">
 
-        function updateDisplay() {
-            display.textContent = currentInput;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mileage Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
         }
 
-        function inputDigit(digit) {
-            if (waitingForSecondOperand) {
-                currentInput = digit;
-                waitingForSecondOperand = false;
-            } else {
-                currentInput = currentInput === '0' ? digit : currentInput + digit;
-            }
-            updateDisplay();
+        #calculator {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
         }
 
-        function inputDecimal() {
-            if (!currentInput.includes('.')) {
-                currentInput += '.';
-                updateDisplay();
-            }
+        #screen {
+            padding: 20px;
+            font-size: 24px;
+            text-align: right;
+            border-bottom: 1px solid #ccc;
         }
 
-        function handleOperator(nextOperator) {
-            const inputValue = parseFloat(currentInput);
-            if (firstOperand === null) {
-                firstOperand = inputValue;
-            } else if (operator) {
-                const result = performCalculation(operator, inputValue);
-                currentInput = String(result);
-                updateDisplay();
-            }
-            waitingForSecondOperand = true;
-            operator = nextOperator;
+        #buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
         }
 
-        function performCalculation(operator, secondOperand) {
-            switch (operator) {
-                case '+': return firstOperand + secondOperand;
-                case '-': return firstOperand - secondOperand;
-                case '*': return firstOperand * secondOperand;
-                case '/': return firstOperand / secondOperand;
-                default: return secondOperand;
-            }
+        button {
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #fff;
+            transition: background-color 0.3s;
         }
 
-        function resetCalculator() {
-            currentInput = '0';
-            firstOperand = null;
-            operator = null;
-            waitingForSecondOperand = false;
-            updateDisplay();
+        button.operator {
+            background-color: #2196f3;
         }
 
-        function handleClear() {
-            resetCalculator();
-            vibrate();
+        button.double {
+            grid-column: span 2;
         }
 
-        function handleEqual() {
-            if (operator && !waitingForSecondOperand) {
-                const inputValue = parseFloat(currentInput);
-                const result = performCalculation(operator, inputValue);
-                currentInput = String(result);
-                updateDisplay();
-                firstOperand = result;
-                operator = null;
-                waitingForSecondOperand = true;
-                vibrate();
-            }
+        button.reset {
+            background-color: #e91e63;
         }
 
-        function vibrate() {
-            if (navigator.vibrate) {
-                navigator.vibrate(100); // Vibrate for 100 milliseconds
-            }
+        button.equal {
+            background-color: #ff9800;
         }
 
-        // Event listeners for digit buttons
-        document.querySelectorAll('.button[data-value]').forEach(button => {
-            button.addEventListener('click', () => {
-                inputDigit(button.getAttribute('data-value'));
-                vibrate();
+        button:active {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="calculator">
+        <div id="screen"></div>
+        <div id="buttons">
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button class="operator">/</button>
+
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button class="operator">*</button>
+
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button class="operator">-</button>
+
+            <button class="double">0</button>
+            <button>.</button>
+            <button class="operator">+</button>
+            <button class="reset">C</button>
+
+            <button class="double equal">=</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const screen = document.getElementById('screen');
+            const buttons = document.getElementById('buttons');
+
+            buttons.addEventListener('click', function (event) {
+                if (event.target.matches('button')) {
+                    const buttonText = event.target.textContent;
+
+                    if (buttonText === '=') {
+                        try {
+                            screen.textContent = eval(screen.textContent);
+                        } catch (error) {
+                            screen.textContent = 'Error';
+                        }
+                    } else if (buttonText === 'C') {
+                        screen.textContent = '';
+                    } else {
+                        screen.textContent += buttonText;
+                    }
+                }
             });
         });
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            const screen = document.getElementById('screen');
+            const buttons = document.getElementById('buttons');
 
-        // Event listener for decimal button
-        document.querySelector('.button[data-value="."]').addEventListener('click', () => {
-            inputDecimal();
-            vibrate();
-        });
+            buttons.addEventListener('click', function (event) {
+                if (event.target.matches('button')) {
+                    const buttonText = event.target.textContent;
 
-        // Event listeners for operator buttons
-        document.querySelectorAll('.button.operator[data-value]').forEach(button => {
-            button.addEventListener('click', () => {
-                handleOperator(button.getAttribute('data-value'));
-                vibrate();
+                    // Vibrate on button click
+                    if ('vibrate' in navigator) {
+                        navigator.vibrate(50);
+                    }
+
+                    if (buttonText === '=') {
+                        try {
+                            screen.textContent = eval(screen.textContent);
+                        } catch (error) {
+                            screen.textContent = 'Error';
+                        }
+                    } else if (buttonText === 'C') {
+                        screen.textContent = '';
+                    } else {
+                        screen.textContent += buttonText;
+                    }
+                }
             });
         });
+    </script>
+</body>
 
-        // Event listener for clear button
-        document.getElementById('clear').addEventListener('click', handleClear);
-
-        // Event listener for equal button
-        document.getElementById('equal').addEventListener('click', handleEqual);</script></body></html>
+</html>
